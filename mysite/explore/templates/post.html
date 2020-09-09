@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load explore-tags %}
+{% block content %}
+<head>
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script src="{% static 'javascript/post-script.js'%}" type="text/javascript" ></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/post-base.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row" id="main-post-container">
+                <div class="card" id="card-post">
+                    <div class="card-title">{{post.title}}</div>
+                    <div class="card-body">{{post.content}}</div>
+                    
+                    <a href="#!" class="card-link like"><span id="up"> {{post.upvote.count}} </span><i onclick="like('{{post.id}}',1)" class="fa fa-thumbs-up"></i></a>
+                    <a href="#!" class="card-link dislike "><span id="down"> {{post.downvote.count}} </span><i onclick="like('{{post.id}}',0)" class="fa fa-thumbs-down"></i></a>
+                    <script>
+                      function like(post_id, liked){
+                            
+                            
+                            $.ajax({
+                                type: "POST",
+                                url:"{% absolute_url 'explore:like' %}",
+                                data: {'post_id': post_id,'liked':liked, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                                dataType: "json",
+                                success: function(data){
+                                  if (data['liked'] == 1) {
+                                    var upVotes = data['votes']
+                                    document.getElementById("up").innerHTML = ' '
+                                    document.getElementById("up").innerHTML = upVotes
+                                  } else {
+                                    var downVotes = data['votes']
+                                    document.getElementById("down").innerHTML = ' '
+                                    document.getElementById("down").innerHTML = downVotes
+                                  }
+                                }, error : function(error) {
+                                  console.log('error')
+                                  console.log(error)
+                                }
+                          }); 
+
+                      }
+                    </script>  
+                </div>
+                
+                <p class="text-right" ><a href="#" id="comment-btn" class="btn btn-default btn-sm "><i class="fa fa-reply"></i> Add Comment</a></p>
+                
+                <form id="comment-form" method="post" action="." enctype="multipart/form-data" >
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <div class="form-row">
+                            {{ commentForm.content|as_crispy_field}}
+                        </div>
+                        
+                        <p class="text-right" ><a href="#" class="btn btn-default btn-sm "><i class="fa fa-reply"></i> submit</a></p>
+                </form>
+            </div>
+            <div class="row" id="comments-container">
+
+                {% for comment in comments %}
+                <article class="row comment">
+                    
+                    <div class="col-md-2 col-sm-2 hidden-xs">
+                      <figure class="thumbnail">
+                        <img class="img-responsive" src="http://www.tangoflooring.ca/wp-content/uploads/2015/07/user-avatar-placeholder.png" />
+                        <figcaption class="text-center">{{comment.user}}</figcaption>
+                      </figure>
+                    </div>
+                    <div class="col-md-10 col-sm-10">
+                      <div class="panel panel-default arrow left">
+                        <div class="panel-body">
+                          <header class="text-left">
+                            <div class="comment-user"><i class="fa fa-user"></i>{{comment.user}} </div>
+                            <time class="comment-date" datetime="16-12-2014 01:05"><i class="fa fa-clock-o"></i> {{ comment.created_date}}</time>
+                          </header>
+                          <div class="comment-post">
+                            <p>
+                              {{comment.content}}
+                            </p>
+                          </div>
+                          <p class="text-right" ><a href="#" id="{{comment.id}}"class="btn btn-default btn-sm reply-btn"><i class="fa fa-reply"></i> reply</a></p>
+                        </div>
+                        
+                        <div class="reply-container">
+                            {% for child in comment.children %}
+                            <article class="row reply">
+                                  <div class="col-md-8 col-sm-8 pull-right">
+                                    <div class="panel panel-default"></div>
+                                      <div class="panel-body">
+                                        <header class="text-right">
+                                          <div class="comment-user"><i class="fa fa-user"></i>{{child.user}} </div>
+                                          <time class="comment-date" datetime="16-12-2014 01:05"><i class="fa fa-clock-o"></i> {{child.created_date}}</time>
+                                        </header>
+                                        <div class="comment-post">
+                                          <p>
+                                            {{child.content}}
+                                          </p>
+                                        </div>
+                                      </div>   
+                            </article>
+                            {% endfor %}
+                        </div>
+                        
+                        <form class="reply-form" id="reply-form-{{comment.id}}" method="post" action="." enctype="multipart/form-data" > 
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <div class="form-row">
+                                    {{ commentForm.content|as_crispy_field }}
+                                    <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                                </div>
+                                <button type="submit" class="btn btn-dark">submit</button> 
+                        </form>
+                        
+                      </div>
+                    </div>
+                  </article>
+                  {% endfor %}
+
+
+
+
+                
+                
+            </div>
+        </div>
+    </div>          
+</div>
+
+{% endblock %}
+
+
+{% for comment in comments %}
+                    <div class="comment-container"> 
+                        
+                        <div class="comment-contents">
+                            <div class="col-md-6">
+                                {{comment.content}}  
+                            </div>
+                              
+                            <div class=" col-md-3 comment-reply-form-container">
+                                <button class= "btn reply-btn btn-dark pull-right">Add Reply </button>
+                                <form class="reply-form" method="post" action="." enctype="multipart/form-data" > 
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <div class="form-row">
+                                            {{ commentForm.content|as_crispy_field }}
+                                            <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                                        </div>
+                                        <button type="submit" class="btn btn-dark">submit</button> 
+                                </form>
+                            </div>  
+                        </div>
+
+
+                        <div class="col-md-9 child-comments">
+                            {% for child in comment.children %}
+                                {{child.content}}
+                            {% endfor %}
+                        </div>
+
+                        
+                    </div>
+                    
+                {% endfor%}

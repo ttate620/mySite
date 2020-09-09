@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<head>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/login-base.css' %}">
+</head>
+<div class="alert alert-warning">
+  {% if form.errors %}
+    <p>Username or password not correct</p>
+  {% endif %}
+</div>
+<div class="container">
+  
+  
+    <div class="row">
+      <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+        <div class="card card-signin my-5">
+          <div class="card-body">
+            
+            <h5 class="card-title text-center">Sign In</h5>
+            <form class="form-signin" method="POST">
+              {% csrf_token %}
+                {% for form_field in form %}
+                  <div class="form-row">
+                      {{ form_field|as_crispy_field }}
+                  </div>
+                {% endfor %}
+                <div><a href="{% url 'login:reset_password' %}" >Forgot Password</a></div>
+                <div class="custom-control custom-checkbox mb-3">
+                    
+                    <input type="checkbox" class="custom-control-input" id="customCheck1">
+                    <label class="custom-control-label" for="customCheck1">Remember password</label>
+                </div>
+                <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign in</button>         
+            </form>
+
+            <div class="border-top pt3">
+              <small class="font-weight-bold">
+                  No accout?<a class="font-weight-bold" href="{% url 'login:register' %}"> Sign up here</a>
+              </small>
+            </div>
+            
+            
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<script src="{% static 'javascript/login-script.js' %}"></script>
+{% endblock %}

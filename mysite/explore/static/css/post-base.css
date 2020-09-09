@@ -1,0 +1,35 @@
+#main-post-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+  }
+#main-post-container > div {
+    background-color: #f1f1f1;
+    width: 60%;
+    margin: 10px;
+    text-align: center;
+
+}
+#main-post-container > div > .card-title {
+    font-weight: bold;
+    font-size: 25px;
+}
+.comment-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center; 
+}
+.comment {
+    background-color: cadetblue;
+}
+.reply{
+    background-color: azure;
+}
+.comment-user {
+    font-size: 12.5px;
+}
+.comment-date{
+    font-size: 12.5px;
+}

@@ -1,0 +1,60 @@
+.search-input {
+    height: 30px;
+    width: 150px;
+    
+}
+.profile-pic {
+    widows: 50px;
+    height:50px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: auto;
+}
+img {
+    border-radius: 50%;
+}
+.flex-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+.flex-container > div {
+    background-color: #f1f1f1;
+    width: 60%;
+    margin: 10px;
+    text-align: center;
+
+}
+#user-profiles {
+    overflow-y: scroll;
+}
+#forum-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+#forum-container > div {
+    background-color: #f1f1f1;
+    width: 60%;
+    margin: 10px;
+    text-align: center;
+
+}
+#create-new-forum {
+    display: flex;
+    flex-direction: column; 
+    width: 90%; 
+}
+#create-new-forum > div {
+    background-color: #f1f1f1;
+    width: 100%;
+    margin: 10px;
+    text-align: center;
+}
+.form-row {
+    text-align: left; 
+    margin-left: 5%;
+    margin-right: 5%;
+}
+

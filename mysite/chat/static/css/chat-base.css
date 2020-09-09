@@ -1,0 +1,62 @@
+.no-gutters {
+    padding: 0;
+  }
+
+.chat-library {
+padding: 10px 15px;
+display: flex;
+vertical-align: baseline;
+background: #fff;
+transition: .3s ease;
+}
+
+hr {
+margin: 5px auto;
+width: 60%;
+}
+p {
+margin: 0;
+}
+button {
+  border: none;
+  outline: 0;
+  display: inline-block;
+  padding: 8px;
+  color: #5BFFE5;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  /* width: 100%; */
+  font-size: 18px;
+}
+
+select {
+  overflow-y: scroll;
+}
+.card-body {
+	height:200px;
+  overflow-y: scroll;
+}
+ul {
+  list-style-type:none;
+}
+.input-container {
+  display:flex;
+  flex-direction: row;
+  justify-content: space-around;
+} 
+
+.iput-container > div {
+  
+  display:flex;
+  flex-direction: column;
+  justify-content: space-around;
+  justify-content: center;
+
+}
+.room-name-input {
+  width:100px;
+}
+#form-row {
+  width:100px;
+}

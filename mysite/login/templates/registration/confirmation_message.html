@@ -1,0 +1,11 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="alert alert-info">
+    Please confirm your email address to complete the registration.
+
+    <a href="{% url 'login:login'%}">Login</a>
+</div>
+{% endblock %}

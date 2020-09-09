@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load accounts-tags %}
+{% block content %}
+<head> 	
+    <link rel="stylesheet" type="text/css" href="{% static 'css/profile-base.css' %}"> 
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script src="{% static 'javascript/profile-script.js'%}" type="text/javascript" ></script></head>
+<div class="container">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="row"> 
+                
+                <div class="profile-image center">
+                    <img src="{% static 'img/stock-profile-image.png' %}" alt="profile pic" style="width:100%">
+                    {% if user.is_authenticated and profile.user == user %}
+                        <button class="button" id="changePic" >Change Profile Picture</button>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row" > 
+                    <div id="recent-activity-container">
+                        <div id="recent-activity">Recent Activity</div>
+                        {% for post in posts %}
+                        <div class="card" >
+                            <div class="card-body">
+                                <div class="card-title">{{post.title}}</div>
+                                <div class="card-body">{{post.content}}</div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>  
+                 
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div id="profile-bio">
+                    <h3>{{profile}} About Me</h3> 
+
+                    <div class="profile-bio-i row">
+                        <div class="col-sm-3"><p>Bio</p></div>
+                        <div class="col-sm-6 info-field" id="bio">{{profile.bio}}</div>  
+                        {% if user.is_authenticated and profile.user == user %}  
+                            <div class="col-sm-2 text-muted"> 
+                                <div class="row edit">edit</div>
+                                <div class="row save">save</div>
+                               
+                            </div>   
+                        {% endif %} 
+                    </div>
+                    <div class="profile-bio-i row">   
+                        <div class="col-sm-3"><p>Location</p></div>
+                        <div class="col-sm-6 info-field" id="location">{{profile.location}}</div> 
+                        {% if user.is_authenticated and profile.user == user %}  
+                            <div class="col-sm-2 text-muted"> 
+                                <div class="row edit">edit</div>
+                                <div class="row save">save</div>
+                             
+                            </div>   
+                        {% endif %}      
+                    </div>
+                    <div class="profile-bio-i row">   
+                            <div class="col-sm-3"><p>Account Age</p></div>
+                            <div class="col-sm-6 info-feild" id="created">{{profile.created}} </div>
+                            
+                    </div>
+                    {% if user.is_authenticated and profile.user == user %}
+                        <button href= "{% url 'account:accounts' %}" class="button" id="editProfile" >Edit Profile</button>
+                        <button><a href="{% url 'login:reset_password' %}">Reset Password </a></button>
+                    {% endif %} 
+                    {% if user.is_authenticated and profile.user != user %}
+                    <div class="button-container">
+                        {{friendsList}}
+                        {% if status == 'friends' %}
+                            <button class="friend-button" id="{{profile.pk}}" name="remove">Remove Friend</button>
+                            <button class="send-message-button"><a href="{% url 'chat:chat' user_profile.user.pk %}" >Start Chat </a> </button>
+                           
+                        {% elif status == 'pending2' %}
+                            <button class="friend-button" id="{{profile.pk}}" name="accept" >Accept Friend</button>
+                        {% elif status == 'pending1' %}
+                            <button class="friend-button">Waiting</button>
+                        {% else %}
+                            <button class="friend-button" id="{{profile.pk}}" name="add" >Add Friend</button>
+                        {% endif %}
+                    
+                    </div>
+                    {% endif %}
+                    <script>
+                        $(".friend-button").click(function(){
+                            var operation = $(this).attr('name');
+                            var url = '';
+                            var myData = {};
+                            var pk = this.id;
+                            $(this).hide()
+                            if (operation == 'add'){
+                                url = "{% url 'explore:change_friend_status' 'add' profile.pk %}";
+                                myData = {
+                                'operation': 'add',
+                                'other_user_pk': pk,
+                                };
+                            } else if (operation == 'remove') {
+                                url = "{% url 'explore:change_friend_status' 'remove' profile.pk %}";
+                                myData = {
+                                'operation': 'remove',
+                                'other_user_pk': pk,
+                                };
+                            } else {
+                                url = "{% url 'explore:change_friend_status' 'accept' profile.pk %}";
+                                myData = {
+                                'operation': 'accept',
+                                'other_user_pk': pk,
+                                };
+                            }
+                            $.ajax({
+                                data: myData,
+                                'csrfmiddlewaretoken': '{{ csrf_token }}',
+                                url : url,
+                                global: false,
+                                type: "GET",
+                            })
+                        })
+                    </script>
+                </div>
+            </div>
+            <div class="row">
+                <div id="friends">Friends</div>
+                <div id="profile-friend-container" >
+                    
+                    {% for friend in friendsList %}
+                    <div class="card">
+                 
+                        <img src="{% static '/main/images/stock-profile-image.png' %}" alt="{{friend.user.username}} profile pic" style="width:100%">
+                        <h1>{{ friend.user.username }}</h1>
+                        <p class="title">{{friend}}</p>
+                        <p>SomeInfo <i class="fas fa-info    "></i></p>
+                        <p><a href="{% url 'chat:chat' user_profile.user.pk %}"><button>Send Message</button></a></p>
+                        <p><a href="{% url 'account:profile' friend.pk %}"><button>View Profile</button> </a></p>
+                      </div>
+                    
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    
+    
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,8 @@
+Django
+channels
+channels_redis
+asgi-redis
+django-crispy-forms
+django-utils-six
+Pillow
+

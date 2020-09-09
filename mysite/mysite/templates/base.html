@@ -1,0 +1,77 @@
+{% load static %}
+
+<!DOCTYPE html>
+    <head>
+        <title>MySite</title>
+        
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <link rel="stylesheet" type="text/css" href="{% static '/main/css/base.css' %}">
+        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        
+    </head> 
+
+    <body>
+        <div class="page-header">
+                <nav class="navbar navbar-default" >
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <a class="navbar-brand" href="{% url 'explore:explore' %}">mySite</a>
+                        </div>
+                        <ul class="nav navbar-nav">
+                            
+                            {% if user.is_authenticated %}
+                                <li><a href="{% url 'explore:explore' %}">Explore</a></li>
+                                <li><a href="{% url 'account:user_profile' %}">Profile</a></li>
+                                <li><a href="{% url 'chat:chat' 0 %}">Chat</a></li>
+                            {% endif %}
+                          
+                        </ul>
+                        <form class="navbar-form navbar-left" action="/action_page.php">
+                            <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search" name="search">
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" type="submit">
+                                <i class="glyphicon glyphicon-search"></i>
+                                </button>
+                            </div>
+                            </div>
+                        </form>
+                        {% if user.is_authenticated %}
+                        <ul class="nav navbar-nav">
+                            <li><p> Hello, {{user.username}} </p></li>
+                            <li> 
+                                <div class="dropdown">
+                                
+                                <ul id="notification-bar" class="dropdown-menu">
+                                  {% for notif in notifications %}
+                                    <li><a  href="{% url 'chat:chat-room' notif %}"> {{notif}} </a></li>
+                                  {% endfor %}
+                                </ul>
+                              </div> 
+                            </li>
+                        </ul>
+                        <div class="navbar-brand navbar-right">
+                            <a  href="{% url 'login:logout' %}">Logout</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </nav>
+        </div>
+
+        <div class="content-container">
+            {% if messages %}
+                {% for message in messages %} 
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% block content %}{% endblock %}
+        </div>
+    </body>
+    
+</html>

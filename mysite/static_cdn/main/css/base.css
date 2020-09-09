@@ -1,0 +1,14 @@
+.navbar-nav a{
+  color: black !important;
+}
+.navbar-header a{
+  color: black !important;
+}
+.page-header {
+  background: #007bff;
+  background: linear-gradient(to right, #0062E6, #33AEFF);
+}
+.navbar {
+  background: #007bff;
+  background: linear-gradient(to right, #0062E6, #33AEFF);
+}
