@@ -21,12 +21,15 @@ class SubForumCreationForm(forms.Form):
         exclude = ['slug','creator','forum']
         
         
-class PostCreationForm(forms.Form):
+class PostCreationForm(forms.ModelForm):
     title = forms.CharField(label='Title',max_length=60)
     content = forms.CharField(widget=forms.Textarea)
     class Meta:
         model = Post
-        exlude = ['slug', 'user', 'subForum']
+        exclude = ['slug', 'user', 'subForum', 'upvote', 'downvote', 'created_date', 'edited_date']
 
-class CommentCreationForm(forms.Form):
+class CommentCreationForm(forms.ModelForm):
     content = forms.CharField(widget=forms.Textarea)
+    class Meta:
+        model = Comment
+        exclude = ['upvote', 'downvote', 'created_date', 'edited_date', 'post', 'parent','user']

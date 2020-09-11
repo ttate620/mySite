@@ -74,9 +74,12 @@ def forum(request, slug):
                     description = form.data['description'],
                     creator = form.data['creator']
                     )
+                
                 newSubForum.save()
-                return redirect('explore:forum',slug1 = slug, slug2 = newSubForum.slug)
+                print("created successfully")
+                return redirect('explore:subforum',slug1 = slug, slug2 = newSubForum.slug)
             except Exception as e:
+                print("error ",e)
                 messages.warning(request, f'Subforum title must be unique')
                 return redirect("explore:forum", slug)
 
@@ -126,33 +129,35 @@ def post(request, slug1, slug2, slug3):
     forum = get_object_or_404(Forum, slug=slug1)
     subforum = get_object_or_404(SubForum, slug=slug2, forum=forum)
     post = get_object_or_404(Post, slug=slug3, subForum=subforum)
-   
+    comments = post.get_comments()
     if request.method == 'POST':
-        form = CommentCreationForm(request.POST.copy())
-        form.data['user'] = request.user
-        form.data['post'] = post
-        parent_id = request.POST.get('parent_id')
-        if form.is_valid():
-            
-            newComment = Comment(
-                post = form.data['post'], 
-                user = form.data['user'], 
-                content = form.data['content'],
-                )
-            if parent_id: 
-                newComment.parent = Comment.objects.get(id=parent_id)
-
-            newComment.save()
+        comment_form = CommentCreationForm(request.POST.copy())
+        if comment_form.is_valid():
+            parent_obj = None
+            try:
+                parent_id = int(request.POST.get('parent_id'))
+            except:
+                parent_id = None
+            reply_comment = comment_form.save(commit=False)
+            if parent_id:
+                parent_obj = Comment.objects.get(id=parent_id)
+                reply_comment.parent = parent_obj
+                
+            reply_comment.user = request.user
+            reply_comment.post = post
+            reply_comment.save()
             return redirect('explore:post',slug1 = slug1, slug2 = slug2, slug3 = slug3)
     
-    comments = post.get_comments()
-
+    else:
+        comment_creation_form = CommentCreationForm()
+        
     context = {
         'forum': forum,
         'subforum' : subforum, 
         'post': post,
         'comments': comments,
-        'commentForm': CommentCreationForm()
+        'comment_form': comment_creation_form,
+        
     }
     
     return render(request, "post.html", context)

@@ -33,7 +33,7 @@ class Forum(models.Model):
 class SubForum(models.Model):
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=150)
-    slug = models.SlugField()
+    slug = models.SlugField(blank=True)
     forum = models.ForeignKey(Forum, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -92,7 +92,7 @@ class Comment(models.Model):
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
     content = models.TextField()
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    parent = models.ForeignKey("self", null=True, blank=True, on_delete=models.CASCADE)
+    parent = models.ForeignKey('self', null=True, blank=True,on_delete=models.CASCADE,related_name='replies')
     upvote = models.ManyToManyField(User,blank=True,related_name="comment_upvote")
     downvote = models.ManyToManyField(User,blank=True, related_name="comment_downvote")
     created_date = models.DateTimeField(default=timezone.now)
@@ -122,6 +122,7 @@ class Comment(models.Model):
         return f'{self.user.username} Comment'
 
 
+# method used in testing
 
 def create_forum(user, title, description):
     slug = slugify(title)
