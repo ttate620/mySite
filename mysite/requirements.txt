@@ -1,8 +1,14 @@
 Django
-channels
-channels_redis
-asgi-redis
+#channels
+#channels_redis
+#asgi-redis
 django-crispy-forms
 django-utils-six
 Pillow
+psycopg2
+django_redis
 
+channels===2.1.1
+channels_redis===2.1.1
+daphne===2.1.1
+asgi_redis===1.4.3

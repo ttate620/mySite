@@ -88,4 +88,5 @@
 #bio {
     overflow-y: scroll;
     height: 100px;
+    width:400px;
 }

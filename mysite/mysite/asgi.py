@@ -16,4 +16,4 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
 django.setup()
 
 application = get_default_application() # do I need in production?
-channel_layer = get_channel_layer()
+#channel_layer = get_channel_layer()

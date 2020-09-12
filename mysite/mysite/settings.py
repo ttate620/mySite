@@ -49,24 +49,15 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'mysite.urls'
 ASGI_APPLICATION = "mysite.routing.application"
-# CHANNEL_LAYERS = {
-#     "default": {
-#         "BACKEND": "channels_redis.core.RedisChannelLayer",
-#         "CONFIG": {
-#             "hosts": [("127.0.0.1", 6379)],
-#         },
-#     },
-# }
 CHANNEL_LAYERS = {
-    "default" : {
+    "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            #"hosts": [("redis://redis:6379/1", 6379)],
             "hosts": [("127.0.0.1", 6379)],
         },
-        # "ROUTING": "mysite.routing.application"
-    }
+    },
 }
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -94,14 +85,6 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'mysite_db',
-    #     'USER': 'admin',
-    #     'PASSWORD': 'mysql1123pass',
-    #     'HOST': 'db',
-    #     'PORT': '3306',
-    # }
 }
 
 
@@ -146,7 +129,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'mysite/static_cdn')
-#STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static_cdn')
 MEDIA_ROOT =os.path.join(os.path.dirname(BASE_DIR), 'media_cdn')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -156,9 +138,8 @@ DATE_INPUT_FORMATS = ['%d-%m-%Y']
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'tiffanytatecodes@gmail.com'
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-
+EMAIL_HOST_USER  = open("email.txt","r").read()
+EMAIL_HOST_PASSWORD = open("password.txt","r").read()
 EMAIL_PORT = 587
 
 LOGIN_URL='login:login'

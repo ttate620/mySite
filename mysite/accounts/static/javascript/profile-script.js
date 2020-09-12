@@ -30,10 +30,26 @@ $.ajaxSetup({
 
 
 $(document).ready(function () {
-    $(".save").hide();
-    $(".edit").click(editClicked);
-    $(".save").click(saveClicked);
+    $("#bio").focus(function() {
+      
+    }).blur(function() {
+       
+        var bio = $('#bio').val()
+        var myData = {
+            'profile_field': 'bio',
+            'updated_info': bio,
+        }
+        $.ajaxSetup({
+            headers: { "X-CSRFToken": getCookie("csrftoken") },
+            url : "update/bio/",
+            global: false,
+            type: "POST"
+        });
+        $.ajax({ data : myData}) 
+    });
+
 });
+
 
 function saveClicked(){
     var editableText = $(this).parent().prev();

@@ -10,10 +10,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <div class="container">
-  <div class="row">
+  
     <!-- post details-->
-    <div class="panel">
-      <div class="panel-heading">
+    <div class="panel panel-default">
+      <div class="panel-heading post-heading" >
           <div class="text-center">
               <div class="row">
                   <div class="col-sm-9">
@@ -21,57 +21,82 @@
                   </div>
                   <div class="col-sm-3">
                       <h4 class="pull-right">
-                      <small><em>{{post.created_date}}</em></small>
+                      <small><em>{{post.created_date}}</em><br><em>{{post.user}}</em></small>
                       </h4>
                   </div>
+              
               </div>
           </div>
       </div>
       
-    <div class="panel-body">
+    <div class="panel-body post-body">
       {{ post.content }}
+    </div>
+    <div class="panel-footer">
+            <!-- Comments Form --> 
+            <button type="button" class="comment-button" id="{{post.pk}}">Add a new comment</button>
+            <!-- Hidden input for post-->
+            <form action="." method="post" id="form-{{post.pk}}" class="comment-form">
+                {{ comment_form.as_p }}
+                {% csrf_token %}
+                <input type="hidden"  value="{{ post.pk }}">
+                <button type="submit">Add comment</button>
+            </form>
     </div>
   </div>
 
-  <div class="row">
-      <!-- Comments Form --> 
-      <button type="button" class="comment-button" id="{{post.pk}}">Add a new comment</button>
-      <!-- Hidden input for post-->
-      <form action="." method="post" id="form-{{post.pk}}" class="comment-form">
-          {{ comment_form.as_p }}
-          {% csrf_token %}
-          <input type="hidden"  value="{{ post.pk }}">
-          <button type="submit">Add comment</button>
-      </form>
+
+ 
+
 
       <!-- Comment with nested comments -->
       {% for comment in comments %}
-        <div class="comment" style="background-color: powderblue">
-            <p class="info">{{ comment.created_date }}</p>
-                {{ comment.content|linebreaks }}
-              <button id="{{comment.pk}}" type="button"  class="reply-button">Add a reply</button>
-              <!-- Hidden input for parent comment.id -->
-              <form id="form-{{comment.pk}}" class="reply-form" action="." method="post">
-                <h5>Reply</h5>
-                  {{ comment_form.as_p }}
-                  {% csrf_token %}
-                  <input type="hidden" name="parent_id" value="{{ comment.pk }}">
-                  <input class="button" type="submit" value="Reply">
-              </form>
+      
+        <!-- comment details-->
+        <div class="panel panel-default">
+          <div class="panel-heading">
+              <div class="text-center">
+                  <div class="row">
+                      <div class="col-sm-9">
+                          <h3 class="pull-left">{{ comment.user }}</h3>
+                      </div>
+                      <div class="col-sm-3">
+                          <h4 class="pull-right">
+                          <small><em>{{comment.created_date}}</em></small>
+                          </h4>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          
+          <div class="panel-body">
+            {{ comment.content|linebreaks }}
+          </div>
+          <div class="panel-footer">
+                  <button id="{{comment.pk}}" type="button"  class="reply-button">Add a reply</button>
+                  <!-- Hidden input for parent comment.id -->
+                  <form id="form-{{comment.pk}}" class="reply-form" action="." method="post">
+                    <h5>Reply</h5>
+                      {{ comment_form.as_p }}
+                      {% csrf_token %}
+                      <input type="hidden" name="parent_id" value="{{ comment.pk }}">
+                      <input class="button" type="submit" value="Reply">
+                  </form>
 
-            {% for reply in comment.replies.all %}
-                <p class="info">{{ reply.created_date }}</p>
-                <li>{{ reply.content }}</li>
-            {% endfor %}
-
-            
+                {% for reply in comment.replies.all %}
+                <div class="panel panel-default">
+                  <div class="panel-header"><small class="info">{{reply.user}}, {{ reply.created_date }}</small></div>
+                  <div class="panel-body"><small>{{ reply.content }} </small> </div>
+                </div>
+                {% endfor %}
+          </div>
+        {% empty %}
         </div>
-      {% empty %}
       <h4>There are no comments yet.</h4>
       {% endfor %}
-    </div>
-
+     
     
 
+  
 </div>
 {% endblock %}

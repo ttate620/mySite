@@ -29,7 +29,7 @@ class PostCreationForm(forms.ModelForm):
         exclude = ['slug', 'user', 'subForum', 'upvote', 'downvote', 'created_date', 'edited_date']
 
 class CommentCreationForm(forms.ModelForm):
-    content = forms.CharField(widget=forms.Textarea)
+    content = forms.CharField(label=False,widget=forms.Textarea(attrs={'rows':3, 'cols':60}))
     class Meta:
         model = Comment
         exclude = ['upvote', 'downvote', 'created_date', 'edited_date', 'post', 'parent','user']

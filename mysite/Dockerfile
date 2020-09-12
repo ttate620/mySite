@@ -1,10 +1,32 @@
-FROM python:3.7
+FROM ubuntu:18.04
+RUN apt-get update
+# Set the home directory to /root
+ENV HOME /root
+# cd into the home directory
+WORKDIR /root
+# Install Node
+RUN apt-get update --fix-missing
+RUN apt-get install -y python3
+RUN apt-get install -y python3-pip
+RUN apt-get install -y mysql-client
 
-ENV WEBAPP_DIR=/mysite
+COPY . .
+EXPOSE 8000
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.2.1/wait /wait
+RUN chmod +x /wait
 
-RUN mkdir $WEBAPP_DIR
-WORKDIR $WEBAPP_DIR
-ADD static_cdn .
-ADD requirements.txt $WEBAPP_DIR/
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip3 install django
+RUN pip3 install -U channels
+RUN pip3 install pillow
+RUN pip3 install django-crispy-forms
+RUN pip3 install django-utils-six
+RUN pip3 install pymysql
+RUN pip3 install mysql-connector-python
+RUN pip3 install django-mysql
+RUN pip3 install asgi_redis
+RUN pip3 install channels_redis
+RUN pip3 install django_redis
+
+
+
+CMD /wait && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000

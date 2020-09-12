@@ -29,6 +29,7 @@ $.ajaxSetup({
 });
 
 function friends_selected() {
+    console.log("friends selected")
     var friendList = document.getElementById("friendList");
     var opts = [];
     for (var i=0, len=friendList.options.length; i<len; i++) {
@@ -42,6 +43,7 @@ function friends_selected() {
     return opts;
 }
 $('#create-chat-button').on('click',function(e){
+    console.log("buttin click")
     var roomName = document.querySelector('#room-name-input').value;
     var friends_sel = friends_selected();
     

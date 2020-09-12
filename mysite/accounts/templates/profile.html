@@ -5,7 +5,8 @@
 <head> 	
     <link rel="stylesheet" type="text/css" href="{% static 'css/profile-base.css' %}"> 
     <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
-    <script src="{% static 'javascript/profile-script.js'%}" type="text/javascript" ></script></head>
+    <script src="{% static 'javascript/profile-script.js'%}" type="text/javascript" ></script>
+</head>
 <div class="container">
     <div class="row">
         <div class="col-md-5">
@@ -13,9 +14,6 @@
                 
                 <div class="profile-image center">
                     <img src="{% static 'img/stock-profile-image.png' %}" alt="profile pic" style="width:100%">
-                    {% if user.is_authenticated and profile.user == user %}
-                        <button class="button" id="changePic" >Change Profile Picture</button>
-                    {% endif %}
                 </div>
             </div>
             <div class="row" > 
@@ -40,26 +38,10 @@
 
                     <div class="profile-bio-i row">
                         <div class="col-sm-3"><p>Bio</p></div>
-                        <div class="col-sm-6 info-field" id="bio">{{profile.bio}}</div>  
-                        {% if user.is_authenticated and profile.user == user %}  
-                            <div class="col-sm-2 text-muted"> 
-                                <div class="row edit">edit</div>
-                                <div class="row save">save</div>
-                               
-                            </div>   
-                        {% endif %} 
-                    </div>
-                    <div class="profile-bio-i row">   
-                        <div class="col-sm-3"><p>Location</p></div>
-                        <div class="col-sm-6 info-field" id="location">{{profile.location}}</div> 
-                        {% if user.is_authenticated and profile.user == user %}  
-                            <div class="col-sm-2 text-muted"> 
-                                <div class="row edit">edit</div>
-                                <div class="row save">save</div>
-                             
-                            </div>   
-                        {% endif %}      
-                    </div>
+                         
+                        <textarea id="bio">
+                            {{profile.bio}}
+                        </textarea>
                     <div class="profile-bio-i row">   
                             <div class="col-sm-3"><p>Account Age</p></div>
                             <div class="col-sm-6 info-feild" id="created">{{profile.created}} </div>

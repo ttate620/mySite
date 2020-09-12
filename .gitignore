@@ -7,7 +7,15 @@ db.sqlite3-journalv
 .env
 .venv
 env/
+backend-env/
 venv/
 ENV/
 env.bak/
 venv.bak/
+password.txt
+email.txt
+
+
+Dockerfile
+requirements.txt
+docker-compose.yml

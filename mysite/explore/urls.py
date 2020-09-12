@@ -9,10 +9,5 @@ urlpatterns = [
     url(r'^(?P<slug1>[-\w]+)/(?P<slug2>[-\w]+)/$', views.subforum, name="subforum"),
     url(r'^(?P<slug1>[-\w]+)/(?P<slug2>[-\w]+)/(?P<slug3>[-\w]+)/$', views.post, name="post"),
     path('like/', views.like, name="like"),
-    #path('<slug:slug>/', views.forum, name="forum"),
-    #path('<slug:slug1>/<slug:slug2>/', views.subforum, name="subforum"),
-    #path('<slug:slug1>/<slug:slug2>/<slug:slug3>/',views.post, name="post"),
-    
 
-    
 ]
